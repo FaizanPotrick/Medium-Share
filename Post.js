@@ -5,18 +5,19 @@ const Post = require("./schema/PostSchema");
 
 router.get("/api/post/all", async (req, res) => {
   const post_response = await Post.find();
-  res.status(200).json(post_response);
+  const post = post_response.reverse();
+  res.status(200).json(post);
 });
 router.get("/api/post/user", async (req, res) => {
   const { user_id } = req.cookies;
   const post_response = await Post.find({ user_id: user_id });
-  res.status(200).json(post_response);
+  const post = post_response.reverse();
+  res.status(200).json(post);
 });
 router.post("/api/post/registration", async (req, res) => {
   const { user_id } = req.cookies;
   const { name, description, mind_map_link } = req.body;
   try {
-    console.log(req.body);
     const user_response = await User.findById(user_id);
     await Post.create({
       user_id: user_id,

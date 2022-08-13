@@ -1,8 +1,9 @@
 import React from "react";
 import { useCookies } from "react-cookie";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["user_id"]);
   return (
     <nav className="flex justify-around items-center h-[8vh] bg-gray-900">
@@ -48,6 +49,7 @@ function Navbar() {
             className="text-white font-medium rounded-lg text-sm px-5 py-2.5 bg-blue-600"
             onClick={() => {
               removeCookie("user_id");
+              navigate("/login");
               window.location.reload();
             }}
           >

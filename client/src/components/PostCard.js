@@ -61,7 +61,7 @@ function PostCard({
         </a>
       </div>
       <p className="text-slate-500">{description}</p>
-      <img className="w-full rounded-xl" src={photo_url} alt="image" />
+      <img className="w-full rounded-xl" src={photo_url} alt="sorry" />
       <div className="flex justify-between items-center">
         <div className="flex space-x-1 items-center">
           <svg
@@ -94,6 +94,17 @@ function PostCard({
             />
           </svg>
           <span>{likesCount}</span>
+          <svg
+            className="w-6 h-6 text-gray-700 fill-slate-100"
+            stroke="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              strokeWidth="1"
+              d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
+            ></path>
+          </svg>
+          <div>{comments.length}</div>
         </div>
         <svg
           className={`w-6 h-6 ${isComment ? "" : "rotate-180"} cursor-pointer`}
@@ -131,7 +142,7 @@ function PostCard({
                     {comment.user_email_address}
                   </h1>
                   <div className="text-sm">
-                    {moment(comment.createdAt).format("DD MMM YYYY")}
+                    {moment(comment.createdAt).format("hh:mm A / DD MMM YYYY")}
                   </div>
                 </div>
                 <p className=" ml-2 mt-1 text-gray-600">{comment.message}</p>
@@ -140,7 +151,9 @@ function PostCard({
           })}
         </div>
       )}
-      <div className="text-sm">{moment(createdAt).format("DD MM YYYY")}</div>
+      <div className="text-sm">
+        {moment(createdAt).format("hh:mm A / DD MM YYYY")}
+      </div>
     </div>
   );
 }

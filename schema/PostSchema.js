@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
-const User = new mongoose.Schema(
+const Post = new mongoose.Schema(
   {
     user_id: {
-      type: String,
-      required: true,
-    },
-    user_email_address: {
       type: String,
       required: true,
     },
@@ -29,9 +25,13 @@ const User = new mongoose.Schema(
       required: true,
     },
     likes: [],
+    photo_url: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
-module.exports = mongoose.connection.useDb("Web_GDSC").model("Post", User);
+module.exports = mongoose.connection.useDb("Web_GDSC").model("Post", Post);

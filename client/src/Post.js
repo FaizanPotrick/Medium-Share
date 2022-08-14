@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PostCard from "./components/PostCard";
-import { useCookies } from "react-cookie";
 
 function Post() {
-  const [cookies] = useCookies(["user_id"]);
-  if (cookies.user_id === undefined || cookies.user_id === null) {
-    window.location.href = "/login";
-  }
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const fetchPosts = async () => {
     const res = await fetch("/api/post/all");
     const data = await res.json();
@@ -17,7 +13,7 @@ function Post() {
   };
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [isFetching]);
 
   return (
     <div>
@@ -47,7 +43,13 @@ function Post() {
           )}
           {posts.length !== 0 &&
             posts.map((post) => {
-              return <PostCard post={post} key={post._id} />;
+              return (
+                <PostCard
+                  post={post}
+                  setIsFetching={setIsFetching}
+                  key={post._id}
+                />
+              );
             })}
         </div>
       )}

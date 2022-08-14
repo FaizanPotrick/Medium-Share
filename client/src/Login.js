@@ -8,22 +8,29 @@ function Login() {
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isAlert, setIsAlert] = useState({
+    isShow: false,
+    message: "",
+  });
   const onChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
   const onSubmit = async (e) => {
     e.preventDefault();
+    setIsAlert({
+      isShow: false,
+      message: "",
+    });
     setIsLoading(true);
-    const res = await fetch("/api/login", {
+    const res = await fetch("/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
     });
-    // const data = await res.json();
-    // console.log(data);
+    const data = await res.json();
     setIsLoading(false);
     if (res.status === 200) {
       setUser({
@@ -32,15 +39,23 @@ function Login() {
       });
       navigate("/post");
       window.location.reload();
+    } else {
+      setIsAlert({
+        isShow: true,
+        message: data,
+      });
     }
   };
   return (
     <div className="h-[92vh] flex justify-center items-center">
-      <div className="w-full max-w-sm rounded-lg shadow-md p-8 bg-gray-800 dark:border-gray-700">
+      <div className="w-full max-w-sm rounded-lg shadow-md p-8 bg-gray-800 border-gray-700">
         <form className="space-y-6" onSubmit={onSubmit}>
           <h5 className="text-xl font-medium text-white">
             Login to your account
           </h5>
+          {isAlert.isShow && (
+            <div className="text-red-700">{isAlert.message}</div>
+          )}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-gray-300">
               Email Address

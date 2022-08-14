@@ -9,6 +9,7 @@ function MyPost() {
   }
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const fetchPosts = async () => {
     const res = await fetch("/api/post/user");
     const data = await res.json();
@@ -17,7 +18,7 @@ function MyPost() {
   };
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [isFetching]);
 
   return (
     <div>
@@ -47,7 +48,13 @@ function MyPost() {
           )}
           {posts.length !== 0 &&
             posts.map((post) => {
-              return <PostCard post={post} key={post._id} />;
+              return (
+                <PostCard
+                  post={post}
+                  setIsFetching={setIsFetching}
+                  key={post._id}
+                />
+              );
             })}
         </div>
       )}

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("./schema/UserSchema");
-router.post("/api/registration", async (req, res) => {
+router.post("/api/user/registration", async (req, res) => {
   const { email_address, password } = req.body;
   try {
     const email_address_check = await User.findOne({
@@ -26,7 +26,7 @@ router.post("/api/registration", async (req, res) => {
     res.status(400).json("Invalid Request");
   }
 });
-router.post("/api/login", async (req, res) => {
+router.post("/api/user/login", async (req, res) => {
   const { email_address, password } = req.body;
   try {
     const user_response = await User.findOne({

@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input[type="file"]::-webkit-file-upload-button,
+input[type="file"]::file-selector-button {
+  @apply bg-slate-200 text-slate-900 font-medium border-0 px-4 py-2.5 mr-2;
+}

@@ -4,6 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+const fileUpload = require("express-fileupload");
 const app = express();
 const url = process.env.DATABASE_URL;
 try {
@@ -22,8 +23,9 @@ app.use(
 );
 app.use(cors());
 app.use(cookieParser());
+app.use(fileUpload());
 app.use(express.static(path.join(__dirname, "./client/build")));
-app.use(require("./Registration.js"));
+app.use(require("./Register.js"));
 app.use(require("./Post.js"));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

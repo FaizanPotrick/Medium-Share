@@ -26,6 +26,7 @@ function PostCard({
   });
   const [isComment, setIsComment] = useState(false);
   const [comment, setComment] = useState("");
+  const [seeMore, setSeeMore] = useState(false);
   const onComment = async (e) => {
     e.preventDefault();
     if (cookies.user_id === undefined || cookies.user_id === null) {
@@ -60,7 +61,18 @@ function PostCard({
           Mind Map
         </a>
       </div>
-      <p className="text-slate-500">{description}</p>
+      <p className="text-slate-500">
+        {description.slice(0, seeMore ? description.length : 130)}
+        {!seeMore && <span>...</span>}
+        <span
+          className="ml-2 text-blue-700 cursor-pointer"
+          onClick={() => {
+            setSeeMore(!seeMore);
+          }}
+        >
+          {!seeMore ? "show more" : "show less"}
+        </span>
+      </p>
       <img className="w-full rounded-xl" src={photo_url} alt="sorry" />
       <div className="flex justify-between items-center">
         <div className="flex space-x-1 items-center">
@@ -154,8 +166,9 @@ function PostCard({
           })}
         </div>
       )}
-      <div className="text-sm">
-        {moment(createdAt).format("hh:mm A / DD MM YYYY")}
+      <div className="text-sm flex justify-between items-center">
+        <div>{moment(createdAt).format("DD MM YYYY")}</div>
+        <div>{moment(createdAt).format("hh:mm A")}</div>
       </div>
     </div>
   );

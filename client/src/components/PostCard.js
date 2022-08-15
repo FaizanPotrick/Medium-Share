@@ -95,9 +95,12 @@ function PostCard({
           </svg>
           <span>{likesCount}</span>
           <svg
-            className="w-6 h-6 text-gray-700 fill-slate-100"
+            className={`w-6 h-6 text-gray-700 ${
+              isComment ? "fill-slate-300" : "fill-slate-50"
+            } cursor-pointer`}
             stroke="currentColor"
             viewBox="0 0 20 20"
+            onClick={() => setIsComment(!isComment)}
           >
             <path
               strokeWidth="1"
@@ -106,14 +109,14 @@ function PostCard({
           </svg>
           <div>{comments.length}</div>
         </div>
-        <svg
+        {/* <svg
           className={`w-6 h-6 ${isComment ? "" : "rotate-180"} cursor-pointer`}
           onClick={() => setIsComment(!isComment)}
           fill="currentColor"
           viewBox="0 0 20 20"
         >
           <path d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"></path>
-        </svg>
+        </svg> */}
       </div>
       {isComment && (
         <div className="mt-2">

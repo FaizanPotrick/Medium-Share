@@ -4,29 +4,33 @@ import { useCookies } from "react-cookie";
 
 function AddPost() {
   const navigate = useNavigate();
+
   const [cookies] = useCookies(["user_id"]);
   if (cookies.user_id === undefined || cookies.user_id === null) {
     window.location.href = "/login";
   }
+
   const [post, setPost] = useState({
     name: "",
     description: "",
-    mind_map_link: "",
-    photo: {},
+    image: {},
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isAlert, setIsAlert] = useState({
     isShow: false,
     message: "",
   });
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setPost({ ...post, [name]: value });
   };
+
   const onUpload = (e) => {
     const { files } = e.target;
-    setPost({ ...post, photo: files[0] });
+    setPost({ ...post, image: files[0] });
   };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsAlert({
@@ -37,21 +41,20 @@ function AddPost() {
     const formData = new FormData();
     formData.append("name", post.name);
     formData.append("description", post.description);
-    formData.append("mind_map_link", post.mind_map_link);
-    formData.append("photo", post.photo);
-    const res = await fetch("/api/post/registration", {
+    formData.append("image", post.image);
+    const response = await fetch("/api/post/register", {
       method: "POST",
       body: formData,
     });
-    const data = await res.json();
+    const data = await response.json();
     setIsLoading(false);
-    if (res.status === 200) {
+    if (response.status === 200) {
       setPost({
         name: "",
         description: "",
-        mind_map_link: "",
+        image: {},
       });
-      navigate("/mypost");
+      navigate(cookies.user_id);
     } else {
       setIsAlert({
         isShow: true,
@@ -59,79 +62,50 @@ function AddPost() {
       });
     }
   };
+
   return (
     <div className="h-[92vh] flex justify-center items-center">
-      <div className="w-full max-w-xl rounded-lg shadow-md p-8 bg-gray-800 border-gray-700">
+      <div className="w-full max-w-xl rounded-xl shadow-md py-8 px-5 bg-gray-800 border-gray-700">
         <form
-          className="space-y-6"
+          className="space-y-3"
           onSubmit={onSubmit}
           encType="multipart/form-data"
         >
-          <h5 className="text-xl font-medium text-white">Add Post</h5>
+          <div className="text-xl font-medium text-white">Add Post</div>
           {isAlert.isShow && (
             <div className="text-red-700">{isAlert.message}</div>
           )}
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300">Name</label>
-            <input
-              type="test"
-              name="name"
-              className="border border-gray-500 text-sm rounded-lg w-full p-2.5 bg-gray-600 text-white"
-              placeholder="Name"
-              onChange={onChange}
-              value={post.name}
-              maxLength="150"
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-300">
-              Description
-            </label>
-            <textarea
-              id="message"
-              rows="4"
-              name="description"
-              className="border border-gray-500 text-sm rounded-lg w-full p-2.5 bg-gray-600 text-white"
-              placeholder="Description"
-              onChange={onChange}
-              value={post.description}
-              maxLength="500"
-              required
-            />
-          </div>
-          <div className="grid md:grid-cols-2 gap-2">
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300">
-                Mind Map Link
-              </label>
-              <input
-                type="text"
-                name="mind_map_link"
-                className="border border-gray-500 text-sm rounded-lg w-full p-2.5 bg-gray-600 text-white"
-                placeholder="Mind Map Link"
-                onChange={onChange}
-                value={post.mind_map_link}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300">
-                Upload Photo
-              </label>
-              <input
-                type="file"
-                name="photo"
-                className="border border-gray-500 text-sm rounded-lg w-full bg-gray-600 text-white"
-                onChange={onUpload}
-                required
-              />
-            </div>
-          </div>
-
+          <input
+            type="text"
+            name="name"
+            className="border border-gray-500 text-sm rounded-lg w-full p-2 bg-gray-600 text-white"
+            placeholder="Name"
+            onChange={onChange}
+            value={post.name}
+            maxLength="150"
+            required
+          />
+          <textarea
+            id="message"
+            rows="4"
+            name="description"
+            className="border border-gray-500 text-sm rounded-lg w-full p-2 bg-gray-600 text-white"
+            placeholder="Description"
+            onChange={onChange}
+            value={post.description}
+            maxLength="500"
+            required
+          />
+          <input
+            type="file"
+            name="image"
+            className="border border-gray-500 text-sm rounded-lg w-full bg-gray-600 text-white"
+            onChange={onUpload}
+            required
+          />
           <button
             type="submit"
-            className="w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600"
+            className="w-full text-white font-medium rounded-lg text-sm px-5 py-2 text-center bg-blue-600"
           >
             {isLoading ? "Loading..." : "Add"}
           </button>

@@ -35,7 +35,7 @@ function PostCard({
       <img
         className="w-full rounded-t-xl h-52"
         src={"http://localhost:3000" + "/api/image/" + _id}
-        alt="image not found"
+        alt="not found"
       />
       <div className="px-5 mb-3 flex flex-col justify-between gap-1">
         <div className="text-xl md:text-2xl font-semibold">{name}</div>

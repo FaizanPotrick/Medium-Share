@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from "react";
 import PostCard from "./components/PostCard";
+import { useLocation, useParams } from "react-router-dom";
 
 function Post() {
+  const location = useLocation();
+  const { user_id } = useParams();
+
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
+
   const fetchPosts = async () => {
-    const res = await fetch("/api/post/all");
-    const data = await res.json();
+    const response = await fetch(
+      `/api/post/all${location.pathname === "/" ? "" : "?user_id=" + user_id}`
+    );
+    const data = await response.json();
     setPosts(data);
     setIsLoading(false);
   };
+
   useEffect(() => {
     fetchPosts();
-  }, [isFetching]);
+  }, [isFetching, user_id]);
 
   return (
     <div>
@@ -36,12 +44,11 @@ function Post() {
         </div>
       ) : (
         <div>
-          {posts.length === 0 && (
-            <div className="h-[92vh] flex justify-center items-center text-2xl font-semibold">
+          {posts.length === 0 ? (
+            <div className="h-[92vh] flex justify-center items-center text-xl md:text-2xl font-semibold">
               No Post Found
             </div>
-          )}
-          {posts.length !== 0 &&
+          ) : (
             posts.map((post) => {
               return (
                 <PostCard
@@ -50,7 +57,8 @@ function Post() {
                   key={post._id}
                 />
               );
-            })}
+            })
+          )}
         </div>
       )}
     </div>

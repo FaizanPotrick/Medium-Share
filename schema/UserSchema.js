@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const User = new mongoose.Schema({
+const { Schema, connection } = require("mongoose");
+
+const User = new Schema({
   email_address: {
     type: String,
     trim: true,
@@ -13,4 +14,5 @@ const User = new mongoose.Schema({
     required: true,
   },
 });
-module.exports = mongoose.connection.useDb("Web_GDSC").model("User", User);
+
+module.exports = connection.useDb("Web_GDSC").model("User", User);

@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
-const Comment = new mongoose.Schema(
+const { Schema, connection } = require("mongoose");
+
+const Comment = new Schema(
   {
     post_id: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
     },
     user_email_address: {
@@ -20,6 +21,5 @@ const Comment = new mongoose.Schema(
     timestamps: true,
   }
 );
-module.exports = mongoose.connection
-  .useDb("Web_GDSC")
-  .model("Comment", Comment);
+
+module.exports = connection.useDb("Web_GDSC").model("Comment", Comment);

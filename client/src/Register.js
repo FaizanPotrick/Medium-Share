@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 function Register() {
   const navigate = useNavigate();
+
+  const [cookies] = useCookies(["user_id"]);
+
+  useEffect(() => {
+    if (
+      cookies.user_id !== undefined &&
+      cookies.user_id !== null &&
+      cookies.user_id !== ""
+    ) {
+      navigate(-1);
+    }
+  }, []);
 
   const [user, setUser] = useState({
     email_address: "",
@@ -40,8 +53,7 @@ function Register() {
         email_address: "",
         password: "",
       });
-      navigate("/");
-      window.location.reload();
+      navigate(-1);
     } else {
       setIsAlert({
         isShow: true,

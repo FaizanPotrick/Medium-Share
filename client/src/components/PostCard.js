@@ -1,27 +1,31 @@
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 function PostCard({
   post: { _id, name, description, likes, createdAt, comments },
   setIsFetching,
 }) {
+  const navigate = useNavigate();
+
   const [cookies] = useCookies(["user_id"]);
   const [likesCount, setLikesCount] = useState(likes.length);
-  const [userLike, setUserLike] = useState(() => {
-    if (likes.includes(cookies.user_id)) {
-      return true;
-    }
-    return false;
-  });
+  const [userLike, setUserLike] = useState(
+    likes.includes(cookies.user_id) ? true : false
+  );
   const [isComment, setIsComment] = useState(false);
   const [comment, setComment] = useState("");
   const [seeMore, setSeeMore] = useState(false);
 
   const onComment = async (e) => {
     e.preventDefault();
-    if (cookies.user_id === undefined || cookies.user_id === null) {
-      return (window.location.href = "/login");
+    if (
+      cookies.user_id === undefined ||
+      cookies.user_id === null ||
+      cookies.user_id === ""
+    ) {
+      return navigate("/login");
     }
     const response = await fetch(`/api/comment/post/${_id}/${comment}`);
     if (response.status === 200) {
@@ -34,7 +38,7 @@ function PostCard({
     <div className="max-w-sm container my-5 flex flex-col justify-between gap-2 bg-white rounded-2xl shadow-inner drop-shadow-xl p-0 text-slate-900 border">
       <img
         className="w-full rounded-t-xl h-52"
-        src={"http://localhost:3000" + "/api/image/" + _id}
+        src={window.location.href + "api/image/" + _id}
         alt="not found"
       />
       <div className="px-5 mb-3 flex flex-col justify-between gap-1">
@@ -47,7 +51,7 @@ function PostCard({
           <span
             className={`${
               description.length < 130 ? "hidden" : "inline-block"
-            } ml-2 text-blue-700 cursor-pointer text-sm`}
+            } text-blue-700 cursor-pointer text-sm`}
             onClick={() => {
               setSeeMore(!seeMore);
             }}
@@ -63,8 +67,12 @@ function PostCard({
               fill={!userLike ? "none" : "currentColor"}
               stroke="currentColor"
               onClick={async () => {
-                if (cookies.user_id === undefined || cookies.user_id === null) {
-                  return (window.location.href = "/login");
+                if (
+                  cookies.user_id === undefined ||
+                  cookies.user_id === null ||
+                  cookies.user_id === ""
+                ) {
+                  return navigate("/login");
                 }
                 const response = await fetch(`/api/post/like/${_id}`);
                 if (response.status === 200) {

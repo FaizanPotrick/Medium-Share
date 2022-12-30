@@ -1,42 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies(["user_id"]);
-  const [isLogin, setIsLogin] = useState(
-    cookies.user_id === undefined ||
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    if (
+      cookies.user_id === undefined ||
       cookies.user_id === null ||
       cookies.user_id === ""
-      ? false
-      : true
-  );
+    ) {
+      if (document.cookie === "") {
+        return setIsLogin(false);
+      }
+    }
+    return setIsLogin(true);
+  }, [location]);
+
   return (
-    <nav className="flex justify-around items-center h-[8vh] bg-slate-800 font-semibold">
-      <Link to="/" className="text-white text-2xl md:text-3xl">
-        Web GDSC
+    <nav className="flex justify-around items-center p-2.5 bg-slate-800 text-white font-semibold">
+      <Link to="/" className="text-2xl md:text-3xl">
+        Medium Share
       </Link>
-      <div className="flex items-center gap-6 font-medium text-sm">
+      <div className="flex items-center justify-center gap-4 text-sm sm:text-base">
         {!isLogin ? (
           <>
-            <Link to="/register" className="text-white md:text-lg">
-              Register
-            </Link>
-            <Link to="/login" className="text-white md:text-lg">
-              Login
-            </Link>
+            <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
           </>
         ) : (
           <>
-            <Link to={`/${cookies.user_id}`} className="text-white md:text-lg">
-              My Post
-            </Link>
-            <Link to="/addpost" className="text-white md:text-lg">
-              Add Post
-            </Link>
+            <Link to={`/post/${cookies.user_id}`}>My Post</Link>
+            <Link to="/post/add">Add Post</Link>
             <button
-              className="text-white md:text-lg"
               onClick={() => {
                 removeCookie("user_id");
                 setIsLogin(false);

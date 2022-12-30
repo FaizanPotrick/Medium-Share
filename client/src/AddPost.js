@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -6,9 +6,16 @@ function AddPost() {
   const navigate = useNavigate();
 
   const [cookies] = useCookies(["user_id"]);
-  if (cookies.user_id === undefined || cookies.user_id === null) {
-    window.location.href = "/login";
-  }
+
+  useEffect(() => {
+    if (
+      cookies.user_id === undefined ||
+      cookies.user_id === null ||
+      cookies.user_id === ""
+    ) {
+      navigate(-1);
+    }
+  }, []);
 
   const [post, setPost] = useState({
     name: "",
@@ -54,7 +61,7 @@ function AddPost() {
         description: "",
         image: {},
       });
-      navigate(cookies.user_id);
+      navigate("/post/" + cookies.user_id);
     } else {
       setIsAlert({
         isShow: true,

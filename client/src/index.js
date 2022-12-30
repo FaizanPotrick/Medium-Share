@@ -18,8 +18,8 @@ root.render(
         <Navbar />
         <Routes>
           <Route path="/" element={<Post />} />
-          <Route path="/:user_id" element={<Post />} />
-          <Route path="/addpost" element={<AddPost />} />
+          <Route path="/post/:user_id" element={<Post />} />
+          <Route path="/post/add" element={<AddPost />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>

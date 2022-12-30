@@ -20,8 +20,11 @@ function Post() {
   };
 
   useEffect(() => {
+    if (user_id || location.pathname === "/") {
+      setIsLoading(true);
+    }
     fetchPosts();
-  }, [isFetching, user_id]);
+  }, [isFetching, location]);
 
   return (
     <div>
